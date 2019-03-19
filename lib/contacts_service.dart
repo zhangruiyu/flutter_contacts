@@ -11,11 +11,10 @@ class ContactsService {
 
   /// Fetches all contacts, or when specified, the contacts with a name
   /// matching [query]
-  static Future<Iterable<Contact>> getContacts({String query, bool withThumbnails = true}) async {
-    Iterable contacts = await _channel.invokeMethod('getContacts', <String, dynamic> {
-      'query': query,
-      'withThumbnails': withThumbnails
-    });
+  static Future<Iterable<Contact>> getContacts(
+      {String query, bool withThumbnails = true}) async {
+    Iterable contacts = await _channel.invokeMethod('getContacts',
+        <String, dynamic>{'query': query, 'withThumbnails': withThumbnails});
     return contacts.map((m) => Contact.fromMap(m));
   }
 
@@ -47,7 +46,15 @@ class Contact {
     this.avatar,
   });
 
-  String identifier, displayName, givenName, middleName, prefix, suffix, familyName, company, jobTitle;
+  String identifier,
+      displayName,
+      givenName,
+      middleName,
+      prefix,
+      suffix,
+      familyName,
+      company,
+      jobTitle;
   Iterable<Item> emails = [];
   Iterable<Item> phones = [];
   Iterable<PostalAddress> postalAddresses = [];
@@ -99,17 +106,21 @@ class Contact {
       "avatar": contact.avatar
     };
   }
+
+  @override
+  String toString() {
+    return 'Contact{identifier: $identifier, displayName: $displayName, givenName: $givenName, middleName: $middleName, prefix: $prefix, suffix: $suffix, familyName: $familyName, company: $company, jobTitle: $jobTitle, emails: $emails, phones: $phones, postalAddresses: $postalAddresses, avatar: $avatar}';
+  }
 }
 
 class PostalAddress {
-  PostalAddress({
-    this.label,
-    this.street,
-    this.city,
-    this.postcode,
-    this.region,
-    this.country
-  });
+  PostalAddress(
+      {this.label,
+      this.street,
+      this.city,
+      this.postcode,
+      this.region,
+      this.country});
   String label, street, city, postcode, region, country;
 
   PostalAddress.fromMap(Map m) {
@@ -122,13 +133,18 @@ class PostalAddress {
   }
 
   static Map _toMap(PostalAddress address) => {
-    "label": address.label,
-    "street": address.street,
-    "city": address.city,
-    "postcode": address.postcode,
-    "region": address.region,
-    "country": address.country
-  };
+        "label": address.label,
+        "street": address.street,
+        "city": address.city,
+        "postcode": address.postcode,
+        "region": address.region,
+        "country": address.country
+      };
+
+  @override
+  String toString() {
+    return 'PostalAddress{label: $label, street: $street, city: $city, postcode: $postcode, region: $region, country: $country}';
+  }
 }
 
 /// Item class used for contact fields which only have a [label] and
@@ -143,4 +159,9 @@ class Item {
   }
 
   static Map _toMap(Item i) => {"label": i.label, "value": i.value};
+
+  @override
+  String toString() {
+    return 'Item{label: $label, value: $value}';
+  }
 }
